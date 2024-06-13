@@ -22,7 +22,7 @@ import org.puloali.engine.scene.lights.SceneLights;
 import static org.lwjgl.glfw.GLFW.*;
 
 
-public class Main implements IAppLogic {
+public class Test implements IAppLogic {
 
     private static final float MOUSE_SENSITIVITY = 0.1f;
     private static final float MOVEMENT_SPEED = 0.005f;
@@ -32,7 +32,7 @@ public class Main implements IAppLogic {
     private Entity bobEntity;
 
     public static void main(String[] args) {
-        Main main = new Main();
+        Test main = new Test();
         Window.WindowOptions opts = new Window.WindowOptions();
         opts.antiAliasing = true;
         Engine gameEng = new Engine("pulo ali new code base", opts, main);

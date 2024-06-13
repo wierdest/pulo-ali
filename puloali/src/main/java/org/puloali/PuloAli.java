@@ -35,6 +35,7 @@ public class PuloAli implements IAppLogic {
 	private long tempoFileiraTopo = 0;
 	private final long atrasoFileiraTopo = 10;
 	private boolean esperandoRolar = false;
+    private boolean estaNaMetadeEsquerda = false;
 	private long tempoRolarParaCima = 0;
 	private final long atrasoRolarParaCima = 10;
 
@@ -67,7 +68,7 @@ public class PuloAli implements IAppLogic {
         SkyBox skyBox = new SkyBox(
         "puloali/src/main/resources/models/skybox/skybox.obj", 
         scene.getTextureCache());
-		skyBox.getSkyBoxEntity().setScale(200);
+		skyBox.getSkyBoxEntity().setScale(100);
 		skyBox.getSkyBoxEntity().updateModelMatrix();
 		scene.setSkyBox(skyBox);
 
@@ -90,16 +91,15 @@ public class PuloAli implements IAppLogic {
         scene.setSceneLights(sceneLights);
 
 
-        // Camera camera = scene.getCamera();
+        Camera camera = scene.getCamera();
         // camera.setPosition(-1.5f, 3.0f, 4.5f);
-        // camera.addRotation((float) Math.toRadians(15.0f), (float) Math.toRadians(390.f));
+        camera.addRotation((float) Math.toRadians(1.0f), (float) Math.toRadians(1.0f));
 
         lightAngle = 0;
     }
 
     @Override
     public void input(Window window, Scene scene, long diffTimeMillis) {
-       
         float move = diffTimeMillis * MOVEMENT_SPEED;
         Camera camera = scene.getCamera();
         if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -125,33 +125,35 @@ public class PuloAli implements IAppLogic {
         }
 
         MouseInput mouseInput = window.getMouseInput();
-        if (mouseInput.isRightButtonPressed()) {
-            Vector2f displVec = mouseInput.getDisplVec();
-            camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
-        }
+        // if (mouseInput.isRightButtonPressed()) {
+        //     Vector2f displVec = mouseInput.getDisplVec();
+        //     camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
+        // }
         long tempoAtual = System.currentTimeMillis();
-        if (mouseInput.isLeftButtonPressed()) {
-            rolagemLigada = true;
-			if (!esperandoClique ||(tempoAtual - tempoUltimoClique) >= atrasoClique) {
+        if(mouseInput.isLeftButtonPressed()) {
+            jogador.setJumpAnimation();            
+
+            // rolagemLigada = true;
+			if(!esperandoClique ||(tempoAtual - tempoUltimoClique) >= atrasoClique) {
 				esperandoClique = true;
 				tempoUltimoClique = tempoAtual;
 	
 				Vector2f posicaoMouse = mouseInput.getCurrentPos();
 				float metadeLarguraJanela = window.getWidth() / 2.0f;
-				boolean estaNaMetadeEsquerda = posicaoMouse.x < metadeLarguraJanela;
+				estaNaMetadeEsquerda = posicaoMouse.x < metadeLarguraJanela;
 
-				if (estaNaMetadeEsquerda) {
-					// System.out.println("CLIQUE METADE ESQUERDA");
-					if(jogador.getPosicaoY() > 0.14) {
-						jogador.descerEsquerda();
-					}
+				// if (estaNaMetadeEsquerda) {
+				// 	// System.out.println("CLIQUE METADE ESQUERDA");
+				// 	if(jogador.getPosicaoY() > 0.14) {
+				// 		jogador.descerEsquerda();
+				// 	}
 				
-				} else {
-					// System.out.println("CLIQUE NA METADE DIREITA");
-					if(jogador.getPosicaoY() > 0.14) {
-						jogador.descerDireita();
-					}
-				}
+				// } else {
+				// 	// System.out.println("CLIQUE NA METADE DIREITA");
+				// 	if(jogador.getPosicaoY() > 0.14) {
+				// 		jogador.descerDireita();
+				// 	}
+				// }
 			}
 		} else {
 			esperandoClique = false;
@@ -166,6 +168,22 @@ public class PuloAli implements IAppLogic {
 
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
+        jogador.setNextFrameAnimationData();
+        if(jogador.isJumping && jogador.isLastAnimationFrame()) {
+            if (estaNaMetadeEsquerda) {
+            	if(jogador.getPosicaoY() > 0.14) {
+            		jogador.descerEsquerda();
+            	}
+            
+            } else {
+            	// System.out.println("CLIQUE NA METADE DIREITA");
+            	if(jogador.getPosicaoY() > 0.14) {
+            		jogador.descerDireita();
+            	}
+            }
+            rolagemLigada = true;
+            
+        }
         if(rolagemLigada) {
 			if(!gameOver && jogador.getPosicaoY() > 0.45) {
 				System.out.println("GAME OVER" + jogador.getPosicaoY());
@@ -193,6 +211,8 @@ public class PuloAli implements IAppLogic {
 					if(mapa.getXPosicaoReferencia() > -0.2f) {
 						mapa.moverTudoParaEsquerda();
 					}
+                    rolagemLigada = jogador.getPosicaoY() <= 0.4;
+                    System.out.println(jogador.getPosicaoY());
 
 				}
 			}

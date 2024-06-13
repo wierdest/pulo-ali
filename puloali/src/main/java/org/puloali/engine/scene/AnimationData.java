@@ -35,6 +35,10 @@ public class AnimationData {
         return currentFrameIdx;
     }
 
+    public boolean isLastFrame() {
+        return currentFrameIdx == currentAnimation.frames().size() / 2;
+    }
+
     public void nextFrame() {
         int nextFrame = currentFrameIdx + 1;
         if (nextFrame > currentAnimation.frames().size() - 1) {
