@@ -19,6 +19,7 @@ public class Jogador {
     private Scene cena;
     private AnimationData dadosAnimacao;
     public boolean isJumping = false;
+    private float yPosOffset = 0.085f;
 
 
     public Jogador(Scene cena) {
@@ -47,7 +48,7 @@ public class Jogador {
         entidadeJogador = new Entity("entidade-jogador", modeloJogador.getId());
 
         posInicial = cuboAtual.getPosition();
-        entidadeJogador.setPosition(posInicial.x, posInicial.y + 0.1f, posInicial.z);
+        entidadeJogador.setPosition(posInicial.x, posInicial.y + yPosOffset, posInicial.z);
 
         rotInicial = cuboAtual.getRotation();
 
@@ -89,7 +90,24 @@ public class Jogador {
         dadosAnimacao.nextFrame();
     }
 
-    public void setJumpAnimation() {
+    public void setJumpAnimation(boolean estaNaMetadeEsquerda) {
+        int numeroColuna = Integer.parseInt(idCuboAtual.charAt(1) + "");
+        char letraFileira = idCuboAtual.charAt(0);
+        if(estaNaMetadeEsquerda) {
+            if(letraFileira == 'A' || letraFileira == 'C' || letraFileira == 'E') {
+                if(numeroColuna == 0) {
+                    System.out.println("LETRA FILEIRA " + letraFileira + "NUMERO COLUNA " + numeroColuna);
+
+                    return;
+                }
+            }
+        } else {
+            if((letraFileira == 'A' || letraFileira == 'C') && numeroColuna == 4) {
+                // System.out.println("LETRA FILEIRA " + letraFileira + "NUMERO COLUNA " + numeroColuna);
+                return ;
+            }
+        }
+
         isJumping = true;
         dadosAnimacao.setCurrentAnimation(modeloJogador.getAnimationList().get(2));
 
@@ -107,7 +125,7 @@ public class Jogador {
 
 
     public void setPosicalInicial() {
-        entidadeJogador.setPosition(posInicial.x, posInicial.y + 0.1f, posInicial.z);
+        entidadeJogador.setPosition(posInicial.x, posInicial.y + yPosOffset, posInicial.z);
         rotInicial = cuboAtual.getRotation();
         entidadeJogador.setRotation(rotInicial);
 
@@ -148,7 +166,7 @@ public class Jogador {
         cuboAtual = modeloCubo.getEntityById("entidade-cubo-" + proximaPosicao, modeloCubo);
         var posicaoAtual= cuboAtual.getPosition();
 
-        entidadeJogador.setPosition(posicaoAtual.x, posicaoAtual.y + (0.1f), posicaoAtual.z);
+        entidadeJogador.setPosition(posicaoAtual.x, posicaoAtual.y + yPosOffset, posicaoAtual.z);
         entidadeJogador.updateModelMatrix();
         idCuboAtual = proximaPosicao;
         setIdleAnimation();

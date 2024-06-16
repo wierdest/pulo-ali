@@ -214,6 +214,7 @@ public class ModelLoader {
     private static float[] processBitangents(AIMesh aiMesh, float[] normals) {
 
         AIVector3D.Buffer buffer = aiMesh.mBitangents();
+   
         float[] data = new float[buffer.remaining() * 3];
         int pos = 0;
         while (buffer.remaining() > 0) {
@@ -378,6 +379,8 @@ public class ModelLoader {
     private static float[] processTangents(AIMesh aiMesh, float[] normals) {
 
         AIVector3D.Buffer buffer = aiMesh.mTangents();
+
+        
         float[] data = new float[buffer.remaining() * 3];
         int pos = 0;
         while (buffer.remaining() > 0) {

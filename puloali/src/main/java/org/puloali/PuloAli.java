@@ -11,10 +11,12 @@ import org.puloali.engine.scene.Camera;
 import org.puloali.engine.scene.Fog;
 import org.puloali.engine.scene.Jogador;
 import org.puloali.engine.scene.Mapa;
+import org.puloali.engine.scene.Nuvem;
 import org.puloali.engine.scene.Scene;
 import org.puloali.engine.scene.SkyBox;
 import org.puloali.engine.scene.lights.AmbientLight;
 import org.puloali.engine.scene.lights.DirLight;
+import org.puloali.engine.scene.lights.PointLight;
 import org.puloali.engine.scene.lights.SceneLights;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -41,6 +43,7 @@ public class PuloAli implements IAppLogic {
 
     private Mapa mapa;
 	private Jogador jogador;
+    private Nuvem nuvemA;
 
 	private boolean gameOver;
 
@@ -65,31 +68,52 @@ public class PuloAli implements IAppLogic {
         mapa = new Mapa(scene);
 		jogador = new Jogador(scene);
 
+        Nuvem nuvemA = new Nuvem(
+            scene, 
+            "a", 
+            "puloali/src/main/resources/models/clouds/a/cloud-a.gltf"
+        );
+        // nuvemA = new Nuvem(
+        //     scene, 
+        //     "a", 
+        //     "puloali/src/main/resources/models/teste/test.gltf"
+        // );
+
         SkyBox skyBox = new SkyBox(
-        "puloali/src/main/resources/models/skybox/skybox.obj", 
+        "puloali/src/main/resources/models/puloali-skybox/skybox.gltf", 
         scene.getTextureCache());
+
 		skyBox.getSkyBoxEntity().setScale(100);
 		skyBox.getSkyBoxEntity().updateModelMatrix();
 		scene.setSkyBox(skyBox);
 
-		scene.setFog(
-			new Fog(
-				true,
-				new Vector3f(0.5f, 0.5f, 0.5f),
-				0.57f
-			)
-		);
+		// scene.setFog(
+		// 	new Fog(
+		// 		true,
+		// 		new Vector3f(0.5f, 0.5f, 0.5f),
+		// 		0.3f
+		// 	)
+		// );
 
         SceneLights sceneLights = new SceneLights();
         AmbientLight ambientLight = sceneLights.getAmbientLight();
-        ambientLight.setIntensity(0.5f);
+        ambientLight.setIntensity(1f);
         ambientLight.setColor(0.3f, 0.3f, 0.3f);
 
         DirLight dirLight = sceneLights.getDirLight();
-        dirLight.setPosition(0, 1, 0);
-        dirLight.setIntensity(1.0f);
-        scene.setSceneLights(sceneLights);
+        dirLight.setPosition(-0.5f, 1f, 0.3f);
+        dirLight.setIntensity(1.2f);
 
+        PointLight pontoLuzNuvem = new PointLight(
+            new Vector3f(1f, 1, 1),
+            new Vector3f(-1f, 0.1f, -3),
+            4.0f
+        );
+
+        sceneLights.getPointLights().add(pontoLuzNuvem);
+
+
+        scene.setSceneLights(sceneLights);
 
         Camera camera = scene.getCamera();
         // camera.setPosition(-1.5f, 3.0f, 4.5f);
@@ -125,14 +149,13 @@ public class PuloAli implements IAppLogic {
         }
 
         MouseInput mouseInput = window.getMouseInput();
-        // if (mouseInput.isRightButtonPressed()) {
-        //     Vector2f displVec = mouseInput.getDisplVec();
-        //     camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
-        // }
+        if (mouseInput.isRightButtonPressed()) {
+            Vector2f displVec = mouseInput.getDisplVec();
+            camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
+        }
         long tempoAtual = System.currentTimeMillis();
         if(mouseInput.isLeftButtonPressed()) {
-            jogador.setJumpAnimation();            
-
+            
             // rolagemLigada = true;
 			if(!esperandoClique ||(tempoAtual - tempoUltimoClique) >= atrasoClique) {
 				esperandoClique = true;
@@ -141,6 +164,8 @@ public class PuloAli implements IAppLogic {
 				Vector2f posicaoMouse = mouseInput.getCurrentPos();
 				float metadeLarguraJanela = window.getWidth() / 2.0f;
 				estaNaMetadeEsquerda = posicaoMouse.x < metadeLarguraJanela;
+
+                jogador.setJumpAnimation(estaNaMetadeEsquerda);
 
 				// if (estaNaMetadeEsquerda) {
 				// 	// System.out.println("CLIQUE METADE ESQUERDA");
@@ -169,19 +194,19 @@ public class PuloAli implements IAppLogic {
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
         jogador.setNextFrameAnimationData();
+        // nuvemA.setNextFrameAnimationData();
         if(jogador.isJumping && jogador.isLastAnimationFrame()) {
             if (estaNaMetadeEsquerda) {
             	if(jogador.getPosicaoY() > 0.14) {
-            		jogador.descerEsquerda();
+            		rolagemLigada = jogador.descerEsquerda();
             	}
             
             } else {
             	// System.out.println("CLIQUE NA METADE DIREITA");
             	if(jogador.getPosicaoY() > 0.14) {
-            		jogador.descerDireita();
+            		rolagemLigada = jogador.descerDireita();
             	}
             }
-            rolagemLigada = true;
             
         }
         if(rolagemLigada) {
@@ -210,9 +235,10 @@ public class PuloAli implements IAppLogic {
 					tempoRolarParaCima = 0;
 					if(mapa.getXPosicaoReferencia() > -0.2f) {
 						mapa.moverTudoParaEsquerda();
+
 					}
                     rolagemLigada = jogador.getPosicaoY() <= 0.4;
-                    System.out.println(jogador.getPosicaoY());
+                    // System.out.println(jogador.getPosicaoY());
 
 				}
 			}

@@ -188,12 +188,12 @@ public class Mapa {
         for(int i = 0; i < fileiras.size(); i++) {
             List<Entity> fileira = blocos.get(fileiras.get(i));
             for(Entity e : fileira) {
-                e.setPosition(e.getPosition().x -0.05f, e.getPosition().y, e.getPosition().z);
+                e.setPosition(e.getPosition().x -0.2f, e.getPosition().y, e.getPosition().z);
                 e.updateModelMatrix();
             }
         }
         
-        player.setPosition(player.getPosition().x -0.05f, player.getPosition().y, player.getPosition().z);
+        player.setPosition(player.getPosition().x -0.2f, player.getPosition().y, player.getPosition().z);
         player.updateModelMatrix();
     }
 
