@@ -175,5 +175,11 @@ public class Jogador {
     public float getPosicaoY() {
         return entidadeJogador.getPosition().y;
     }
+    public float getPosicaoX() {
+        return entidadeJogador.getPosition().x;
+    }
+    public float getPosicaoZ() {
+        return entidadeJogador.getPosition().z;
+    }
 
 }

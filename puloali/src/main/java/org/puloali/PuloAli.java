@@ -11,7 +11,7 @@ import org.puloali.engine.scene.Camera;
 import org.puloali.engine.scene.Fog;
 import org.puloali.engine.scene.Jogador;
 import org.puloali.engine.scene.Mapa;
-import org.puloali.engine.scene.Nuvem;
+import org.puloali.engine.scene.BlocoUI;
 import org.puloali.engine.scene.Scene;
 import org.puloali.engine.scene.SkyBox;
 import org.puloali.engine.scene.lights.AmbientLight;
@@ -43,7 +43,7 @@ public class PuloAli implements IAppLogic {
 
     private Mapa mapa;
 	private Jogador jogador;
-    private Nuvem nuvemA;
+    private BlocoUI nuvemA;
 
 	private boolean gameOver;
 
@@ -68,10 +68,10 @@ public class PuloAli implements IAppLogic {
         mapa = new Mapa(scene);
 		jogador = new Jogador(scene);
 
-        Nuvem nuvemA = new Nuvem(
+        BlocoUI uiBlock = new BlocoUI(
             scene, 
             "a", 
-            "puloali/src/main/resources/models/clouds/a/cloud-a.gltf"
+            "puloali/src/main/resources/models/puloali-ui-block/ui-block.gltf"
         );
         // nuvemA = new Nuvem(
         //     scene, 
@@ -83,7 +83,7 @@ public class PuloAli implements IAppLogic {
         "puloali/src/main/resources/models/puloali-skybox/skybox.gltf", 
         scene.getTextureCache());
 
-		skyBox.getSkyBoxEntity().setScale(100);
+		skyBox.getSkyBoxEntity().setScale(50);
 		skyBox.getSkyBoxEntity().updateModelMatrix();
 		scene.setSkyBox(skyBox);
 
@@ -101,16 +101,16 @@ public class PuloAli implements IAppLogic {
         ambientLight.setColor(0.3f, 0.3f, 0.3f);
 
         DirLight dirLight = sceneLights.getDirLight();
-        dirLight.setPosition(-0.5f, 1f, 0.3f);
+        dirLight.setPosition(jogador.getPosicaoX(), jogador.getPosicaoY(), jogador.getPosicaoZ());
         dirLight.setIntensity(1.2f);
 
-        PointLight pontoLuzNuvem = new PointLight(
-            new Vector3f(1f, 1, 1),
-            new Vector3f(-1f, 0.1f, -3),
-            4.0f
+        PointLight pontoLuzJogador = new PointLight(
+            new Vector3f(1, 0f, 1),
+            new Vector3f(uiBlock.getPosicaoX() - 1.4f, uiBlock.getPosicaoY() + 2.6f, uiBlock.getPosicaoZ() + 0.2f),
+            8.2f
         );
 
-        sceneLights.getPointLights().add(pontoLuzNuvem);
+        sceneLights.getPointLights().add(pontoLuzJogador);
 
 
         scene.setSceneLights(sceneLights);
