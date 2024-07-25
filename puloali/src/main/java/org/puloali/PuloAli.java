@@ -8,7 +8,6 @@ import org.puloali.engine.MouseInput;
 import org.puloali.engine.Window;
 import org.puloali.engine.graph.Render;
 import org.puloali.engine.scene.Camera;
-import org.puloali.engine.scene.Fog;
 import org.puloali.engine.scene.Jogador;
 import org.puloali.engine.scene.Mapa;
 import org.puloali.engine.scene.BlocoUI;
@@ -71,7 +70,7 @@ public class PuloAli implements IAppLogic {
         BlocoUI uiBlock = new BlocoUI(
             scene, 
             "a", 
-            "puloali/src/main/resources/models/puloali-ui-block/ui-block.gltf"
+            "puloali/src/main/resources/models/block/block.gltf"
         );
         // nuvemA = new Nuvem(
         //     scene, 

@@ -29,6 +29,7 @@ public class Mapa {
 
     private static final float POS_Z = 2.1f;
     
+    
     public Mapa(Scene cena) {
 
         modeloCubo = ModelLoader.loadModel(

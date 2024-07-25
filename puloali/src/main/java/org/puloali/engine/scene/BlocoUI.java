@@ -6,35 +6,32 @@ import org.puloali.engine.scene.lights.PointLight;
 
 public class BlocoUI {
 
-    private Entity entidadeNuvem;
-    private Model modeloNuvem;
+    private Entity entidade;
+    private Model modelo;
     private AnimationData dadosAnimacao;
 
     public BlocoUI(Scene cena, String id, String path) {
 
-        modeloNuvem = ModelLoader.loadModel(
-            "modelo-nuvem-" + id,
+        modelo = ModelLoader.loadModel(
+            "modelo-bloco-ui-" + id,
             path,
             cena.getTextureCache(),
             true
         );
 
-        cena.addModel(modeloNuvem);
+        cena.addModel(modelo);
 
-        entidadeNuvem = new Entity("entidade-nuvem-" + id, modeloNuvem.getId());
+        entidade = new Entity("entidade-bloco-ui" + id, modelo.getId());
 
-        entidadeNuvem.setPosition(-1.2f, -0.32f, -2.9f);
-        entidadeNuvem.setScale(0.6f);
-        entidadeNuvem.setRotation(1, -0.8f, -0.1f, (float)-(Math.PI) / 4);
-        // System.out.println("Animações " + modeloNuvem.getAnimationList().size());
-        // dadosAnimacao = new AnimationData(modeloNuvem.getAnimationList().get(0));
+        entidade.setPosition(-1f, 0.2f, -2.8f);
+        entidade.setScale(0.4f);
+        entidade.setRotation(0f, 1f, 0f, (float)-(Math.PI) / 3);
 
-        entidadeNuvem.updateModelMatrix();
-        // System.out.println(modeloNuvem.getAnimationList().get(0).duration() + " " + modeloNuvem.getAnimationList().get(0).name());
+
+        entidade.updateModelMatrix();
 
         
-        
-        cena.addEntity(entidadeNuvem);
+        cena.addEntity(entidade);
 
     }
 
@@ -43,13 +40,13 @@ public class BlocoUI {
     }
 
     public float getPosicaoY() {
-        return entidadeNuvem.getPosition().y;
+        return entidade.getPosition().y;
     }
     public float getPosicaoX() {
-        return entidadeNuvem.getPosition().x;
+        return entidade.getPosition().x;
     }
     public float getPosicaoZ() {
-        return entidadeNuvem.getPosition().z;
+        return entidade.getPosition().z;
     }
 
 
