@@ -72,11 +72,6 @@ public class PuloAli implements IAppLogic {
             "a", 
             "puloali/src/main/resources/models/block/block.gltf"
         );
-        // nuvemA = new Nuvem(
-        //     scene, 
-        //     "a", 
-        //     "puloali/src/main/resources/models/teste/test.gltf"
-        // );
 
         SkyBox skyBox = new SkyBox(
         "puloali/src/main/resources/models/puloali-skybox/skybox.gltf", 
@@ -86,13 +81,6 @@ public class PuloAli implements IAppLogic {
 		skyBox.getSkyBoxEntity().updateModelMatrix();
 		scene.setSkyBox(skyBox);
 
-		// scene.setFog(
-		// 	new Fog(
-		// 		true,
-		// 		new Vector3f(0.5f, 0.5f, 0.5f),
-		// 		0.3f
-		// 	)
-		// );
 
         SceneLights sceneLights = new SceneLights();
         AmbientLight ambientLight = sceneLights.getAmbientLight();

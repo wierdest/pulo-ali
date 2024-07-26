@@ -48,7 +48,6 @@ public class Engine {
         float timeR = targetFps > 0 ? 1000.0f / targetFps : 0;
         float deltaUpdate = 0;
         float deltaFps = 0;
-
         long updateTime = initialTime;
         while (running && !window.windowShouldClose()) {
             window.pollEvents();
