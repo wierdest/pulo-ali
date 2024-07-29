@@ -22,7 +22,6 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class PuloAli implements IAppLogic {
 
-
     private static final float MOUSE_SENSITIVITY = 0.1f;
 
     private static final float MOVEMENT_SPEED = 0.005f;
@@ -42,7 +41,6 @@ public class PuloAli implements IAppLogic {
 
     private Mapa mapa;
 	private Jogador jogador;
-    private BlocoUI nuvemA;
 
 	private boolean gameOver;
 
@@ -58,7 +56,6 @@ public class PuloAli implements IAppLogic {
 
     @Override
     public void cleanup() {
-        // Nothing to be done yet
     }
 
     @Override
@@ -181,28 +178,25 @@ public class PuloAli implements IAppLogic {
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
         jogador.setNextFrameAnimationData();
-        // nuvemA.setNextFrameAnimationData();
+
         if(jogador.isJumping && jogador.isLastAnimationFrame()) {
             if (estaNaMetadeEsquerda) {
             	if(jogador.getPosicaoY() > 0.14) {
             		rolagemLigada = jogador.descerEsquerda();
             	}
-            
             } else {
-            	// System.out.println("CLIQUE NA METADE DIREITA");
             	if(jogador.getPosicaoY() > 0.14) {
             		rolagemLigada = jogador.descerDireita();
             	}
             }
             
         }
+
         if(rolagemLigada) {
 			if(!gameOver && jogador.getPosicaoY() > 0.45) {
 				System.out.println("GAME OVER" + jogador.getPosicaoY());
 				rolagemLigada = false;
 				gameOver = true;
-				// mapa.removerMapaDeCena();
-				// jogador.removerJogadorDeCena();
 				return; 
 			};
 			if(!esperandoRolar) {
@@ -229,9 +223,6 @@ public class PuloAli implements IAppLogic {
 
 				}
 			}
-
 		}
-		
     }
-
 }
